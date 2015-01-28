@@ -1,0 +1,96 @@
+﻿<Window x:Class="GostReferences.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:view="clr-namespace:GostReferences.View"
+        Title="Оформление ссылок по ГОСТ 7.1-2003 «БИБЛИОГРАФИЧЕСКАЯ ЗАПИСЬ. БИБЛИОГРАФИЧЕСКОЕ ОПИСАНИЕ. Общие требования и правила составления»" Height="350" Width="525"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Icon="Media/Microsoft/book_notebook.png">
+    <Window.Resources>
+        <DataTemplate x:Key="CategoryListBoxDataTemplate">
+            <TextBlock Text="{Binding Title}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="SamplesListBoxDataTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock 
+                    Grid.Column="0"
+                    Text="{Binding}" 
+                    TextWrapping="Wrap"
+                    HorizontalAlignment="Left" 
+                    Margin="5"
+                    />
+                <Button 
+                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=CopyStringCommand}"
+                    CommandParameter="{Binding}"
+                    Grid.Column="1"
+                    HorizontalAlignment="Right" 
+                    Margin="5">
+                    <Image 
+                        Source="Media/Microsoft/copy.png" 
+                        ToolTip="Скопировать в буфер обмена" />
+                </Button>
+            </Grid>
+        </DataTemplate>
+        
+    </Window.Resources>
+
+    <Grid Margin="5 5 15 10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                Margin="0 0 0 5">Выберите категорию документа, на который нужно сослаться:</TextBlock>
+            <TextBlock 
+                Grid.Column="1"
+                Margin="0 0 0 5">
+                <view:ExternalBrowserHyperlink NavigateUri="http://gostreferences.codeplex.com/">Перейти на веб-сайт</view:ExternalBrowserHyperlink>
+            </TextBlock>
+        </Grid>
+        <Grid Grid.Row="1" Background="WhiteSmoke">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock 
+                Grid.Column="0" 
+                Margin="0 3 3 3">Фильтр (введите фрагменты категории):</TextBlock>
+            <TextBox 
+                Grid.Column="1" 
+                MinWidth="40"
+                Text="{Binding Path=FilterWordContains, UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox 
+                Grid.Column="2" 
+                Margin="3 3 3 3" 
+                IsThreeState="True" 
+                IsChecked="{Binding Path=FilterIsIndividualWork}">Самостоятельное издание</CheckBox>
+        </Grid>
+        <ListBox Grid.Row="2"
+            x:Name="_literatureSamples"
+            Margin="0 0 0 5" 
+            ItemsSource="{Binding Path=LiteratureSamples.View}" 
+            ItemTemplate="{StaticResource CategoryListBoxDataTemplate}" />
+        <TextBlock Grid.Row="3"
+            Margin="0 0 0 5">Примеры:</TextBlock>
+        <ListBox Grid.Row="4"
+            HorizontalContentAlignment="Stretch"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ItemsSource="{Binding ElementName=_literatureSamples, Path=SelectedItem.Samples}"
+            ItemTemplate="{StaticResource SamplesListBoxDataTemplate}"/>
+    </Grid>
+</Window>
