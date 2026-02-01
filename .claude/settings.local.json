@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(build.bat)",
+      "Bash(cmd.exe /c \"cd /d f:\\\\sources\\\\gost-reference\\\\flutter\\\\gost_bibliography_reference && build.bat\")",
+      "Bash(flutter build:*)",
+      "Bash(powershell:*)",
+      "Bash(flutter clean:*)",
+      "Bash(flutter pub get:*)"
+    ]
+  }
+}

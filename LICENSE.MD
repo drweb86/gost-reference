@@ -1,0 +1,1 @@
+﻿Any OSI-approved license up to your choice.
